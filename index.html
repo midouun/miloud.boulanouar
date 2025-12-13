@@ -4,21 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة الأفكار | جامعة سعيدة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="intro-scene" class="scene-container">
-        <div class="dark-overlay"></div>
+        <div class="darkness-overlay"></div>
         
-        <div class="bulb-container">
+        <div class="ceiling-fixture">
+            <div class="wire"></div>
+            <div class="bulb-socket"></div>
             <div class="bulb" id="main-bulb"></div>
-            <div class="light-ray hidden" id="light-ray"></div>
+            <div class="pull-string" id="pull-string">
+                <div class="string-line"></div>
+                <div class="string-handle"></div>
+            </div>
         </div>
 
-        <div class="ladder">
+        <div class="ladder-container">
             <div class="rail left"></div>
             <div class="rail right"></div>
             <div class="rung"></div><div class="rung"></div><div class="rung"></div>
@@ -27,75 +32,141 @@
             <div class="rung"></div><div class="rung"></div><div class="rung"></div>
         </div>
 
-        <div id="climber" class="climber">
-            <div class="head"></div>
-            <div class="body"></div>
-            <div class="backpack"></div> </div>
+        <div id="character" class="character">
+            <div class="char-head"></div>
+            <div class="char-body">
+                <div class="backpack"></div>
+            </div>
+            <div class="arm left-arm"></div>
+            <div class="arm right-arm" id="action-arm"></div>
+            <div class="leg left-leg"></div>
+            <div class="leg right-leg"></div>
+        </div>
 
-        <button id="start-climb-btn" class="start-btn" onclick="startClimbing()">
-            ابدأ الرحلة <i class="fa-solid fa-arrow-up"></i>
-        </button>
-
-        <div id="idea-section" class="idea-wrapper hidden">
-            <button class="mega-button" onclick="openIdeaForm()">
-                <span class="icon-glow"><i class="fa-regular fa-lightbulb"></i></span>
-                <span class="text">في ماذا تفكر؟</span>
-                <span class="sub-text">شاركنا إبداعك القانوني</span>
+        <div class="start-control" id="start-control">
+            <button class="btn-start" onclick="startSequence()">
+                اصعد لتشغيل النور <i class="fa-solid fa-arrow-up"></i>
             </button>
         </div>
-    </div>
 
-    <div id="data-modal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <div id="step-1" class="form-step">
-                <h3><i class="fa-solid fa-id-card"></i> من أنت؟</h3>
-                <input type="text" id="user-name" placeholder="الاسم" required>
-                <input type="text" id="user-surname" placeholder="اللقب" required>
-                <input type="email" id="user-email" placeholder="البريد الإلكتروني" required>
-                <button class="next-btn" onclick="goToStep2()">التالي <i class="fa-solid fa-arrow-left"></i></button>
-            </div>
-
-            <div id="step-2" class="form-step hidden">
-                <h3><i class="fa-solid fa-pen-nib"></i> دون فكرتك</h3>
-                <textarea id="user-idea" placeholder="اكتب فكرتك هنا... سيتم حفظها في الأرشيف" rows="5"></textarea>
-                <button class="save-btn" onclick="saveAndProceed()">
-                    حفظ وإرسال <i class="fa-solid fa-paper-plane"></i>
+        <div id="secret-door" class="secret-door hidden">
+            <div class="door-frame">
+                <button class="thought-btn" onclick="openDataForm()">
+                    <div class="btn-content">
+                        <i class="fa-regular fa-lightbulb glowing-icon"></i>
+                        <span>في ماذا تفكر؟</span>
+                    </div>
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="psych-onboarding" class="onboarding-overlay hidden">
-        <div class="onboarding-content">
-            <h2 id="q-text" class="question-title">تحليل البيئة النفسية...</h2>
-            <div id="q-options" class="options-grid"></div>
-            <div class="progress-container"><div id="progress-bar" class="progress-fill"></div></div>
+    <div id="data-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>سجل هويتك وفكرتك</h3>
+                <p>لتوثيق الملكية الفكرية</p>
+            </div>
+            
+            <div class="form-body">
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="inp-name" placeholder="الاسم" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-signature"></i>
+                    <input type="text" id="inp-surname" placeholder="اللقب" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="inp-email" placeholder="البريد الإلكتروني" required>
+                </div>
+                <div class="input-group full-width">
+                    <i class="fa-solid fa-pen-fancy"></i>
+                    <textarea id="inp-idea" placeholder="اكتب فكرتك بالتفصيل هنا..." rows="4"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-save" onclick="saveData()">
+                    حفظ وإرسال (JSON) <i class="fa-solid fa-file-export"></i>
+                </button>
+            </div>
         </div>
     </div>
 
-    <header class="official-header hidden" id="main-header">
-        <div class="header-content">
-            <div class="republic">الجمهورية الجزائرية الديمقراطية الشعبية</div>
-            <div class="ministry">وزارة التعليم العالي والبحث العلمي</div>
-            <div class="university-info">
-                <div class="logo-box"><i class="fa-solid fa-scale-balanced"></i></div>
-                <div class="text-info">
+    <div id="psych-ui" class="psych-overlay hidden">
+        <div class="psych-card">
+            <div class="psych-progress">
+                <div class="bar-bg"><div id="p-bar" class="bar-fill"></div></div>
+                <span id="q-counter">01 / 05</span>
+            </div>
+            
+            <div class="question-area">
+                <h2 id="q-text" class="fade-in-text">جاري تحميل السؤال...</h2>
+            </div>
+
+            <div id="options-area" class="options-container">
+                </div>
+        </div>
+    </div>
+
+    <div id="final-platform" class="platform-wrapper hidden">
+        
+        <header class="official-header">
+            <div class="header-top">
+                <div class="republic">الجمهورية الجزائرية الديمقراطية الشعبية</div>
+                <div class="ministry">وزارة التعليم العالي والبحث العلمي</div>
+            </div>
+            
+            <div class="university-banner">
+                <div class="uni-logo"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="uni-text">
                     <h1>جامعة الدكتور مولاي الطاهر - ولاية سعيدة</h1>
                     <h2>كلية الحقوق والعلوم السياسية</h2>
+                    <div class="dept-badge">تخصص: الحقوق</div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <main class="platform-container hidden" id="main-platform">
-        <div class="welcome-bar">
-            <span>مرحباً بالمبدع: <strong id="display-name">زائر</strong></span>
+        <div class="student-bar">
+            <div class="student-details">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>من إعداد الطالب: <strong id="final-student-name">...</strong></span>
+            </div>
+            <div class="date-now" id="date-display"></div>
         </div>
-        <div class="grid-menu">
-            <div class="card"><i class="fa-solid fa-book-open icon"></i><h3>المحاضرات</h3></div>
-            <div class="card"><i class="fa-solid fa-gavel icon"></i><h3>النصوص القانونية</h3></div>
-        </div>
-    </main>
+
+        <main class="main-content">
+            <div class="search-box">
+                <input type="text" placeholder="ابحث في الأرشيف القانوني...">
+                <button><i class="fa-solid fa-search"></i></button>
+            </div>
+
+            <div class="grid-sections">
+                <div class="section-card" onclick="alert('قسم المحاضرات')">
+                    <div class="icon-circle"><i class="fa-solid fa-book-open"></i></div>
+                    <h3>المحاضرات</h3>
+                </div>
+                <div class="section-card" onclick="alert('قسم النصوص')">
+                    <div class="icon-circle"><i class="fa-solid fa-gavel"></i></div>
+                    <h3>النصوص القانونية</h3>
+                </div>
+                <div class="section-card" onclick="alert('قسم الامتحانات')">
+                    <div class="icon-circle"><i class="fa-solid fa-file-signature"></i></div>
+                    <h3>الامتحانات</h3>
+                </div>
+                <div class="section-card" onclick="alert('قسم المنهجية')">
+                    <div class="icon-circle"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>المنهجية</h3>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            جميع الحقوق محفوظة &copy; 2026 | جامعة سعيدة
+        </footer>
+    </div>
 
     <script src="script.js"></script>
 </body>
