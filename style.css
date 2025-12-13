@@ -1,171 +1,103 @@
-:root {
-    --primary: #1e3a8a; /* أزرق داكن رسمي */
-    --secondary: #1e40af;
-    --gold: #b45309; /* لون ذهبي للعناوين */
-    --bg: #f8fafc;
-    --white: #ffffff;
-    --text: #334155;
-    --border: #e2e8f0;
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنصة القانونية | جامعة سعيدة</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-body {
-    margin: 0;
-    font-family: 'Cairo', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    direction: rtl;
-}
+    <div id="psych-onboarding" class="onboarding-overlay">
+        <div class="onboarding-content">
+            <div class="logo-animation"><i class="fa-solid fa-brain"></i></div>
+            <h2 id="q-text" class="question-title">جاري تهيئة البيئة الدراسية...</h2>
+            <div id="q-options" class="options-grid"></div>
+            
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-fill"></div>
+            </div>
+            <p class="helper-text">إجابتك تحدد شكل المنصة لراحتك النفسية</p>
+        </div>
+    </div>
 
-/* --- الترويسة الرسمية --- */
-.official-header {
-    background: var(--white);
-    text-align: center;
-    padding: 20px;
-    border-bottom: 4px solid var(--primary);
-    font-family: 'Amiri', serif; /* خط رسمي */
-    background-image: linear-gradient(#f8fafc 1px, transparent 1px), linear-gradient(90deg, #f8fafc 1px, transparent 1px);
-    background-size: 20px 20px;
-}
+    <header class="official-header">
+        <div class="header-content">
+            <div class="republic">الجمهورية الجزائرية الديمقراطية الشعبية</div>
+            <div class="ministry">وزارة التعليم العالي والبحث العلمي</div>
+            
+            <div class="university-info">
+                <div class="logo-box">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div class="text-info">
+                    <h1>جامعة الدكتور مولاي الطاهر - ولاية سعيدة</h1>
+                    <h2>كلية الحقوق والعلوم السياسية</h2>
+                    <h3 class="spec">تخصص: الحقوق</h3>
+                </div>
+            </div>
+        </div>
+    </header>
 
-.republic, .ministry {
-    font-size: 1rem;
-    margin-bottom: 5px;
-    color: #000;
-}
+    <section class="welcome-bar">
+        <div class="student-info">
+            <span>من إعداد الطالب:</span>
+            <strong class="student-name">بولنوار ميلود</strong>
+        </div>
+        <div class="date-display" id="currentDate"></div>
+    </section>
 
-.university-info {
-    margin-top: 20px;
-    border: 2px solid var(--primary);
-    padding: 20px;
-    border-radius: 10px;
-    display: inline-block;
-    min-width: 60%;
-    position: relative;
-}
+    <main class="platform-container">
+        
+        <div class="search-section">
+            <input type="text" placeholder="ابحث في المحاضرات أو المواد القانونية..." id="searchInput">
+            <button><i class="fa-solid fa-magnifying-glass"></i> بحث</button>
+        </div>
 
-.logo-box {
-    font-size: 3rem;
-    color: var(--primary);
-    margin-bottom: 10px;
-}
+        <div class="grid-menu">
+            <div class="card" onclick="openSection('lectures')">
+                <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                <h3>المحاضرات</h3>
+                <p>دروس ومطبوعات لجميع المقاييس</p>
+            </div>
 
-.university-info h1 { font-size: 1.6rem; margin: 0; color: var(--primary); font-weight: bold; }
-.university-info h2 { font-size: 1.3rem; margin: 5px 0; color: #475569; }
-.spec { color: var(--gold); text-decoration: underline; margin-top: 10px; }
+            <div class="card" onclick="openSection('laws')">
+                <div class="icon"><i class="fa-solid fa-gavel"></i></div>
+                <h3>النصوص القانونية</h3>
+                <p>الدستور، القانون المدني، العقوبات...</p>
+            </div>
 
-/* --- شريط الطالب --- */
-.welcome-bar {
-    background: var(--primary);
-    color: white;
-    padding: 15px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
+            <div class="card" onclick="openSection('exams')">
+                <div class="icon"><i class="fa-solid fa-file-pen"></i></div>
+                <h3>الامتحانات</h3>
+                <p>نماذج امتحانات سابقة وحلولها</p>
+            </div>
 
-.student-info { font-size: 1.1rem; }
-.student-name { color: #fbbf24; margin-right: 5px; font-size: 1.2rem; }
+            <div class="card" onclick="openSection('methodology')">
+                <div class="icon"><i class="fa-solid fa-pen-nib"></i></div>
+                <h3>المنهجية</h3>
+                <p>كيفية إعداد البحوث والتعليق على الأحكام</p>
+            </div>
+        </div>
 
-/* --- المنصة --- */
-.platform-container {
-    padding: 30px 5%;
-    max-width: 1200px;
-    margin: 0 auto;
-    min-height: 60vh;
-}
+        <div id="content-area" class="content-display hidden">
+            <h2 id="section-title">عنوان القسم</h2>
+            <div class="placeholder-content">
+                <i class="fa-solid fa-folder-open big-icon"></i>
+                <p>هذا القسم جاهز لإضافة الملفات بصيغة PDF.</p>
+            </div>
+            <button class="close-btn" onclick="closeSection()">عودة للقائمة</button>
+        </div>
 
-/* البحث */
-.search-section {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 40px;
-}
+    </main>
 
-.search-section input {
-    flex: 1;
-    padding: 15px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-family: 'Cairo';
-    font-size: 1rem;
-}
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 | جامعة سعيدة - الحقوق</p>
+    </footer>
 
-.search-section button {
-    background: var(--gold);
-    color: white;
-    border: none;
-    padding: 0 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-family: 'Cairo';
-}
-
-/* الشبكة (Grid) */
-.grid-menu {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.card {
-    background: var(--white);
-    padding: 25px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    transition: transform 0.3s, border-color 0.3s;
-    cursor: pointer;
-    border: 1px solid var(--border);
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary);
-}
-
-.card .icon {
-    font-size: 2.5rem;
-    color: var(--primary);
-    margin-bottom: 15px;
-}
-
-.card h3 { margin: 0 0 10px 0; color: var(--text); }
-.card p { color: #64748b; font-size: 0.9rem; margin: 0; }
-
-/* منطقة المحتوى */
-.content-display {
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    margin-top: 30px;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-    border-top: 4px solid var(--gold);
-    animation: fadeIn 0.5s;
-}
-
-.close-btn {
-    background: #ef4444; color: white; border: none;
-    padding: 10px 20px; border-radius: 5px; cursor: pointer;
-    margin-top: 20px;
-}
-
-.hidden { display: none; }
-@keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-
-footer {
-    text-align: center;
-    padding: 20px;
-    background: var(--primary);
-    color: white;
-    margin-top: 50px;
-    font-size: 0.9rem;
-}
-
-/* موبايل */
-@media (max-width: 600px) {
-    .university-info { min-width: 90%; }
-    .welcome-bar { flex-direction: column; gap: 10px; text-align: center; }
-}
+    <script src="script.js"></script>
+</body>
+</html>
