@@ -4,11 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المنصة القانونية | جامعة سعيدة</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div id="psych-onboarding" class="onboarding-overlay">
+        <div class="onboarding-content">
+            <div class="logo-animation"><i class="fa-solid fa-brain"></i></div>
+            <h2 id="q-text" class="question-title">جاري تهيئة البيئة الدراسية...</h2>
+            <div id="q-options" class="options-grid"></div>
+            
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-fill"></div>
+            </div>
+            <p class="helper-text">إجابتك تحدد شكل المنصة لراحتك النفسية</p>
+        </div>
+    </div>
 
     <header class="official-header">
         <div class="header-content">
@@ -17,7 +31,8 @@
             
             <div class="university-info">
                 <div class="logo-box">
-                    <i class="fa-solid fa-scale-balanced"></i> </div>
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
                 <div class="text-info">
                     <h1>جامعة الدكتور مولاي الطاهر - ولاية سعيدة</h1>
                     <h2>كلية الحقوق والعلوم السياسية</h2>
@@ -71,9 +86,10 @@
         <div id="content-area" class="content-display hidden">
             <h2 id="section-title">عنوان القسم</h2>
             <div class="placeholder-content">
-                <p>هذا القسم قيد التطوير، سيتم إضافة الملفات قريباً.</p>
+                <i class="fa-solid fa-folder-open big-icon"></i>
+                <p>هذا القسم جاهز لإضافة الملفات بصيغة PDF.</p>
             </div>
-            <button class="close-btn" onclick="closeSection()">إغلاق</button>
+            <button class="close-btn" onclick="closeSection()">عودة للقائمة</button>
         </div>
 
     </main>
