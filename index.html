@@ -3,100 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنصة القانونية | جامعة سعيدة</title>
-    
+    <title>بوابة الأفكار | جامعة سعيدة</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="psych-onboarding" class="onboarding-overlay">
-        <div class="onboarding-content">
-            <div class="logo-animation"><i class="fa-solid fa-brain"></i></div>
-            <h2 id="q-text" class="question-title">جاري تهيئة البيئة الدراسية...</h2>
-            <div id="q-options" class="options-grid"></div>
-            
-            <div class="progress-container">
-                <div id="progress-bar" class="progress-fill"></div>
-            </div>
-            <p class="helper-text">إجابتك تحدد شكل المنصة لراحتك النفسية</p>
+    <div id="intro-scene" class="scene-container">
+        <div class="dark-overlay"></div>
+        
+        <div class="bulb-container">
+            <div class="bulb" id="main-bulb"></div>
+            <div class="light-ray hidden" id="light-ray"></div>
+        </div>
+
+        <div class="ladder">
+            <div class="rail left"></div>
+            <div class="rail right"></div>
+            <div class="rung"></div><div class="rung"></div><div class="rung"></div>
+            <div class="rung"></div><div class="rung"></div><div class="rung"></div>
+            <div class="rung"></div><div class="rung"></div><div class="rung"></div>
+            <div class="rung"></div><div class="rung"></div><div class="rung"></div>
+        </div>
+
+        <div id="climber" class="climber">
+            <div class="head"></div>
+            <div class="body"></div>
+            <div class="backpack"></div> </div>
+
+        <button id="start-climb-btn" class="start-btn" onclick="startClimbing()">
+            ابدأ الرحلة <i class="fa-solid fa-arrow-up"></i>
+        </button>
+
+        <div id="idea-section" class="idea-wrapper hidden">
+            <button class="mega-button" onclick="openIdeaForm()">
+                <span class="icon-glow"><i class="fa-regular fa-lightbulb"></i></span>
+                <span class="text">في ماذا تفكر؟</span>
+                <span class="sub-text">شاركنا إبداعك القانوني</span>
+            </button>
         </div>
     </div>
 
-    <header class="official-header">
+    <div id="data-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div id="step-1" class="form-step">
+                <h3><i class="fa-solid fa-id-card"></i> من أنت؟</h3>
+                <input type="text" id="user-name" placeholder="الاسم" required>
+                <input type="text" id="user-surname" placeholder="اللقب" required>
+                <input type="email" id="user-email" placeholder="البريد الإلكتروني" required>
+                <button class="next-btn" onclick="goToStep2()">التالي <i class="fa-solid fa-arrow-left"></i></button>
+            </div>
+
+            <div id="step-2" class="form-step hidden">
+                <h3><i class="fa-solid fa-pen-nib"></i> دون فكرتك</h3>
+                <textarea id="user-idea" placeholder="اكتب فكرتك هنا... سيتم حفظها في الأرشيف" rows="5"></textarea>
+                <button class="save-btn" onclick="saveAndProceed()">
+                    حفظ وإرسال <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="psych-onboarding" class="onboarding-overlay hidden">
+        <div class="onboarding-content">
+            <h2 id="q-text" class="question-title">تحليل البيئة النفسية...</h2>
+            <div id="q-options" class="options-grid"></div>
+            <div class="progress-container"><div id="progress-bar" class="progress-fill"></div></div>
+        </div>
+    </div>
+
+    <header class="official-header hidden" id="main-header">
         <div class="header-content">
             <div class="republic">الجمهورية الجزائرية الديمقراطية الشعبية</div>
             <div class="ministry">وزارة التعليم العالي والبحث العلمي</div>
-            
             <div class="university-info">
-                <div class="logo-box">
-                    <i class="fa-solid fa-scale-balanced"></i>
-                </div>
+                <div class="logo-box"><i class="fa-solid fa-scale-balanced"></i></div>
                 <div class="text-info">
                     <h1>جامعة الدكتور مولاي الطاهر - ولاية سعيدة</h1>
                     <h2>كلية الحقوق والعلوم السياسية</h2>
-                    <h3 class="spec">تخصص: الحقوق</h3>
                 </div>
             </div>
         </div>
     </header>
 
-    <section class="welcome-bar">
-        <div class="student-info">
-            <span>من إعداد الطالب:</span>
-            <strong class="student-name">بولنوار ميلود</strong>
+    <main class="platform-container hidden" id="main-platform">
+        <div class="welcome-bar">
+            <span>مرحباً بالمبدع: <strong id="display-name">زائر</strong></span>
         </div>
-        <div class="date-display" id="currentDate"></div>
-    </section>
-
-    <main class="platform-container">
-        
-        <div class="search-section">
-            <input type="text" placeholder="ابحث في المحاضرات أو المواد القانونية..." id="searchInput">
-            <button><i class="fa-solid fa-magnifying-glass"></i> بحث</button>
-        </div>
-
         <div class="grid-menu">
-            <div class="card" onclick="openSection('lectures')">
-                <div class="icon"><i class="fa-solid fa-book-open"></i></div>
-                <h3>المحاضرات</h3>
-                <p>دروس ومطبوعات لجميع المقاييس</p>
-            </div>
-
-            <div class="card" onclick="openSection('laws')">
-                <div class="icon"><i class="fa-solid fa-gavel"></i></div>
-                <h3>النصوص القانونية</h3>
-                <p>الدستور، القانون المدني، العقوبات...</p>
-            </div>
-
-            <div class="card" onclick="openSection('exams')">
-                <div class="icon"><i class="fa-solid fa-file-pen"></i></div>
-                <h3>الامتحانات</h3>
-                <p>نماذج امتحانات سابقة وحلولها</p>
-            </div>
-
-            <div class="card" onclick="openSection('methodology')">
-                <div class="icon"><i class="fa-solid fa-pen-nib"></i></div>
-                <h3>المنهجية</h3>
-                <p>كيفية إعداد البحوث والتعليق على الأحكام</p>
-            </div>
+            <div class="card"><i class="fa-solid fa-book-open icon"></i><h3>المحاضرات</h3></div>
+            <div class="card"><i class="fa-solid fa-gavel icon"></i><h3>النصوص القانونية</h3></div>
         </div>
-
-        <div id="content-area" class="content-display hidden">
-            <h2 id="section-title">عنوان القسم</h2>
-            <div class="placeholder-content">
-                <i class="fa-solid fa-folder-open big-icon"></i>
-                <p>هذا القسم جاهز لإضافة الملفات بصيغة PDF.</p>
-            </div>
-            <button class="close-btn" onclick="closeSection()">عودة للقائمة</button>
-        </div>
-
     </main>
-
-    <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026 | جامعة سعيدة - الحقوق</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
