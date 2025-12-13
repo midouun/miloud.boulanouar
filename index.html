@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنصة القانونية | جامعة سعيدة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="official-header">
+        <div class="header-content">
+            <div class="republic">الجمهورية الجزائرية الديمقراطية الشعبية</div>
+            <div class="ministry">وزارة التعليم العالي والبحث العلمي</div>
+            
+            <div class="university-info">
+                <div class="logo-box">
+                    <i class="fa-solid fa-scale-balanced"></i> </div>
+                <div class="text-info">
+                    <h1>جامعة الدكتور مولاي الطاهر - ولاية سعيدة</h1>
+                    <h2>كلية الحقوق والعلوم السياسية</h2>
+                    <h3 class="spec">تخصص: الحقوق</h3>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="welcome-bar">
+        <div class="student-info">
+            <span>من إعداد الطالب:</span>
+            <strong class="student-name">بولنوار ميلود</strong>
+        </div>
+        <div class="date-display" id="currentDate"></div>
+    </section>
+
+    <main class="platform-container">
+        
+        <div class="search-section">
+            <input type="text" placeholder="ابحث في المحاضرات أو المواد القانونية..." id="searchInput">
+            <button><i class="fa-solid fa-magnifying-glass"></i> بحث</button>
+        </div>
+
+        <div class="grid-menu">
+            <div class="card" onclick="openSection('lectures')">
+                <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                <h3>المحاضرات</h3>
+                <p>دروس ومطبوعات لجميع المقاييس</p>
+            </div>
+
+            <div class="card" onclick="openSection('laws')">
+                <div class="icon"><i class="fa-solid fa-gavel"></i></div>
+                <h3>النصوص القانونية</h3>
+                <p>الدستور، القانون المدني، العقوبات...</p>
+            </div>
+
+            <div class="card" onclick="openSection('exams')">
+                <div class="icon"><i class="fa-solid fa-file-pen"></i></div>
+                <h3>الامتحانات</h3>
+                <p>نماذج امتحانات سابقة وحلولها</p>
+            </div>
+
+            <div class="card" onclick="openSection('methodology')">
+                <div class="icon"><i class="fa-solid fa-pen-nib"></i></div>
+                <h3>المنهجية</h3>
+                <p>كيفية إعداد البحوث والتعليق على الأحكام</p>
+            </div>
+        </div>
+
+        <div id="content-area" class="content-display hidden">
+            <h2 id="section-title">عنوان القسم</h2>
+            <div class="placeholder-content">
+                <p>هذا القسم قيد التطوير، سيتم إضافة الملفات قريباً.</p>
+            </div>
+            <button class="close-btn" onclick="closeSection()">إغلاق</button>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 | جامعة سعيدة - الحقوق</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
