@@ -1,128 +1,208 @@
-// --- الجزء 1: منطق المشهد التفاعلي (السلم واللمبة) ---
+/* =========================================
+   1. منطق المشهد والتسلق (Logic)
+   ========================================= */
 
-function startClimbing() {
-    // إخفاء زر البدء
-    document.getElementById('start-climb-btn').classList.add('hidden');
+function startSequence() {
+    // 1. إخفاء الزر
+    document.getElementById('start-control').style.display = 'none';
     
-    const climber = document.getElementById('climber');
-    climber.classList.add('climbing-anim'); // إضافة حركة الاهتزاز
+    const char = document.getElementById('character');
+    const ladderHeight = document.querySelector('.ladder-container').offsetHeight;
+    const bulbPos = 120; // المسافة من الأعلى تقريبا
     
-    // تحريك الشخصية للأعلى (CSS Transition)
-    // حساب ارتفاع السلم تقريباً للوصول للمبة
-    climber.style.bottom = "85%"; 
+    // 2. بدء التسلق (تحريك الشخصية للأعلى + تشغيل الأنيميشن)
+    char.classList.add('climbing');
     
-    // الانتظار حتى يصل (3 ثواني حسب الـ CSS)
+    // نحرك الشخصية إلى موضع أسفل اللمبة بقليل
+    // نستخدم top لضبط المكان بدقة بالنسبة للسقف
+    char.style.bottom = "auto";
+    char.style.top = "calc(100vh - 50px)"; // البداية
+    
+    // الحركة الفعلية (مدة 3.5 ثانية)
     setTimeout(() => {
-        climber.classList.remove('climbing-anim'); // توقف الاهتزاز
-        turnOnLight();
-    }, 3000);
+        char.style.transition = "top 3.5s linear";
+        char.style.top = "180px"; // الموضع النهائي (تحت اللمبة)
+    }, 50);
+
+    // 3. عند الوصول
+    setTimeout(() => {
+        char.classList.remove('climbing'); // توقف الأرجل
+        pullTheString(); // سحب الخيط
+    }, 3600);
 }
 
-function turnOnLight() {
+function pullTheString() {
+    const arm = document.getElementById('action-arm');
+    const string = document.getElementById('pull-string');
+    
+    // 1. رفع اليد
+    arm.classList.add('reaching-arm');
+    
+    setTimeout(() => {
+        // 2. سحب اليد والخيط للأسفل
+        arm.classList.add('pulling-arm');
+        string.classList.add('pulled');
+        
+        // 3. تشغيل النور
+        setTimeout(() => {
+            toggleLights();
+            // إعادة اليد والخيط
+            setTimeout(() => {
+                arm.classList.remove('pulling-arm', 'reaching-arm');
+                string.classList.remove('pulled');
+            }, 300);
+        }, 200);
+    }, 600);
+}
+
+function toggleLights() {
     const bulb = document.getElementById('main-bulb');
-    bulb.classList.add('on');
+    const scene = document.getElementById('intro-scene');
+    const door = document.getElementById('secret-door');
     
-    // تشغيل صوت "تكه" (اختياري)
-    // فتح الباب السري (إظهار زر الفكرة)
-    setTimeout(() => {
-        document.getElementById('idea-section').classList.remove('hidden');
-    }, 500);
+    bulb.classList.add('on');
+    scene.classList.add('lit'); // يزيل الظلام
+    
+    // إظهار الباب السري
+    door.classList.remove('hidden');
+    setTimeout(() => { door.classList.add('visible'); }, 100);
 }
 
-function openIdeaForm() {
+function openDataForm() {
     document.getElementById('data-modal').classList.remove('hidden');
 }
 
-// --- الجزء 2: إدارة الاستمارة و JSON ---
+/* =========================================
+   2. منطق البيانات و JSON
+   ========================================= */
 
-let userData = {};
-
-function goToStep2() {
-    const name = document.getElementById('user-name').value;
-    const surname = document.getElementById('user-surname').value;
-    const email = document.getElementById('user-email').value;
-
-    if(name && surname && email) {
-        userData = { name, surname, email };
-        document.getElementById('step-1').classList.add('hidden');
-        document.getElementById('step-2').classList.remove('hidden');
-    } else {
+function saveData() {
+    const name = document.getElementById('inp-name').value;
+    const surname = document.getElementById('inp-surname').value;
+    const email = document.getElementById('inp-email').value;
+    const idea = document.getElementById('inp-idea').value;
+    
+    if(!name || !surname || !email || !idea) {
         alert("يرجى ملء جميع الحقول");
+        return;
     }
+    
+    // تخزين الاسم للعرض لاحقاً
+    localStorage.setItem('studentName', name + ' ' + surname);
+    
+    // تكوين كائن البيانات
+    const userData = {
+        firstName: name,
+        lastName: surname,
+        email: email,
+        ideaContent: idea,
+        date: new Date().toISOString()
+    };
+    
+    // تحميل ملف JSON
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userData, null, 2));
+    const a = document.createElement('a');
+    a.href = dataStr;
+    a.download = `idea_${name}_${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    
+    // الانتقال للمرحلة التالية
+    transitionToPsych();
 }
 
-function saveAndProceed() {
-    const idea = document.getElementById('user-idea').value;
-    if(!idea) { alert("من فضلك اكتب فكرتك"); return; }
-    
-    userData.idea = idea;
-    userData.timestamp = new Date().toISOString();
-
-    // 1. إنشاء ملف JSON وتحميله
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userData, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `idea_${userData.name}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-
-    // 2. الانتقال للمرحلة التالية (الأسئلة النفسية)
+function transitionToPsych() {
+    // إخفاء المودال
     document.getElementById('data-modal').classList.add('hidden');
     
-    // إزالة مشهد المقدمة بتأثير اختفاء
-    const intro = document.getElementById('intro-scene');
-    intro.style.transform = "translateY(-100%)"; // يرتفع للأعلى
+    // رفع المشهد الأول للأعلى (اختفاء)
+    document.getElementById('intro-scene').style.transform = "translateY(-100%)";
     
-    // تحديث اسم الطالب في المنصة
-    document.getElementById('display-name').innerText = userData.name + ' ' + userData.surname;
-
-    // بدء الأسئلة بعد ثانية
+    // إظهار واجهة الأسئلة بعد لحظة
     setTimeout(() => {
-        document.getElementById('psych-onboarding').classList.remove('hidden');
-        loadQuestion(); // دالة من الكود السابق
-    }, 1000);
+        document.getElementById('psych-ui').classList.remove('hidden');
+        loadQuestion();
+    }, 800);
 }
 
-// --- الجزء 3: نظام التحليل النفسي (الذي صممناه سابقاً) ---
-// (هنا نضع نفس كود الأسئلة السابق مع تعديل بسيط في النهاية لإظهار المنصة)
+/* =========================================
+   3. منطق الأسئلة النفسية (Logic)
+   ========================================= */
 
 const questions = [
-    { text: "أين تفضل الدراسة؟", options: [{text:"مكتبة", score:"official"}, {text:"غرفة مظلمة", score:"dark"}] },
-    { text: "الصوت المفضل؟", options: [{text:"سكون", score:"dark"}, {text:"مطر", score:"calm"}] },
-    { text: "حالتك الذهنية؟", options: [{text:"تركيز", score:"official"}, {text:"استرخاء", score:"calm"}] },
-    { text: "اللون المريح لك؟", options: [{text:"أزرق", score:"official"}, {text:"أصفر قديم", score:"reader"}] },
-    { text: "هدفك اليوم؟", options: [{text:"حفظ", score:"dark"}, {text:"فهم", score:"reader"}] }
+    { text: "عندما تدرس، ماهو الوقت المفضل لديك؟", options: [
+        {txt:"الصباح الباكر (نشاط)", type:"official"}, {txt:"الليل الهادئ (تركيز)", type:"dark"}, 
+        {txt:"بعد الظهر (استرخاء)", type:"calm"}, {txt:"أي وقت (قراءة)", type:"reader"}
+    ]},
+    { text: "ما الذي يشتت انتباهك أكثر؟", options: [
+        {txt:"الفوضى", type:"official"}, {txt:"الضوضاء", type:"dark"}, 
+        {txt:"الهاتف", type:"reader"}, {txt:"التوتر", type:"calm"}
+    ]},
+    { text: "اختر لوناً يريح عينيك الآن:", options: [
+        {txt:"أزرق سماوي", type:"official"}, {txt:"أسود/رمادي", type:"dark"}, 
+        {txt:"أخضر طبيعي", type:"calm"}, {txt:"أصفر دافئ", type:"reader"}
+    ]},
+    { text: "ما هو هدفك من دخول المنصة؟", options: [
+        {txt:"البحث عن قانون", type:"official"}, {txt:"مراجعة للامتحان", type:"dark"}, 
+        {txt:"تصفح بهدوء", type:"calm"}, {txt:"قراءة معمقة", type:"reader"}
+    ]},
+    { text: "كيف تشعر حالياً؟", options: [
+        {txt:"متحمس", type:"official"}, {txt:"جاد", type:"dark"}, 
+        {txt:"قلق قليلاً", type:"calm"}, {txt:"فضولي", type:"reader"}
+    ]}
 ];
-// (اختصرت الأسئلة هنا، استخدم القائمة الكاملة من الرد السابق)
 
-let qIndex = 0;
-let scores = { official: 0, dark: 0, calm: 0, reader: 0 };
+let qIdx = 0;
+let scores = { official:0, dark:0, calm:0, reader:0 };
 
 function loadQuestion() {
-    if(qIndex >= questions.length) { finishPsych(); return; }
-    const q = questions[qIndex];
+    if(qIdx >= questions.length) { finishPsych(); return; }
+    
+    const q = questions[qIdx];
+    
+    // تحديث النصوص
     document.getElementById('q-text').innerText = q.text;
-    const div = document.getElementById('q-options');
-    div.innerHTML = '';
+    document.getElementById('q-counter').innerText = `0${qIdx+1} / 05`;
+    document.getElementById('p-bar').style.width = `${((qIdx+1)/5)*100}%`;
+    
+    // توليد الخيارات
+    const container = document.getElementById('options-area');
+    container.innerHTML = '';
+    
     q.options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.className = 'option-btn'; 
-        btn.innerText = opt.text;
-        // تنسيق بسيط للأزرار بالجافاسكريبت أو CSS
-        btn.style.margin = "5px"; btn.style.padding = "10px";
-        btn.onclick = () => { scores[opt.score]++; qIndex++; loadQuestion(); };
-        div.appendChild(btn);
+        btn.className = 'opt-btn';
+        btn.innerText = opt.txt;
+        btn.onclick = () => {
+            scores[opt.type]++;
+            qIdx++;
+            // تأثير خروج ودخول ناعم
+            document.querySelector('.question-area').style.opacity = 0;
+            setTimeout(() => {
+                loadQuestion();
+                document.querySelector('.question-area').style.opacity = 1;
+            }, 300);
+        };
+        container.appendChild(btn);
     });
 }
 
 function finishPsych() {
-    // تحديد النمط وتطبيقه
-    let best = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
-    document.body.className = `theme-${best}`; // تأكد أن لديك الـ CSS لهذه الفئات
+    // حساب النتيجة
+    let bestTheme = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
     
-    // إخفاء الأسئلة وإظهار المنصة النهائية
-    document.getElementById('psych-onboarding').classList.add('hidden');
-    document.getElementById('main-header').classList.remove('hidden');
-    document.getElementById('main-platform').classList.remove('hidden');
+    // تطبيق الثيم على الـ Body
+    document.body.className = bestTheme;
+    document.body.style.overflow = "auto"; // إعادة التمرير
+    
+    // إخفاء الأسئلة وإظهار المنصة
+    document.getElementById('psych-ui').classList.add('hidden');
+    document.getElementById('final-platform').classList.remove('hidden');
+    
+    // إعداد بيانات المنصة
+    document.getElementById('final-student-name').innerText = localStorage.getItem('studentName');
+    
+    const dateOpts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('date-display').innerText = new Date().toLocaleDateString('ar-DZ', dateOpts);
 }
