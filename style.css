@@ -1,103 +1,158 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنصة القانونية | جامعة سعيدة</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+/* --- تعريف الأنماط النفسية (CSS Variables) --- */
+:root {
+    /* القيم الافتراضية (سيتم تغييرها بالجافاسكريبت) */
+    --bg-color: #f8fafc;
+    --text-color: #334155;
+    --primary-color: #1e3a8a;
+    --secondary-color: #1e40af;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --header-bg: #ffffff;
+    --header-text: #000000;
+    --accent: #b45309; /* ذهبي */
+}
 
-    <div id="psych-onboarding" class="onboarding-overlay">
-        <div class="onboarding-content">
-            <div class="logo-animation"><i class="fa-solid fa-brain"></i></div>
-            <h2 id="q-text" class="question-title">جاري تهيئة البيئة الدراسية...</h2>
-            <div id="q-options" class="options-grid"></div>
-            
-            <div class="progress-container">
-                <div id="progress-bar" class="progress-fill"></div>
-            </div>
-            <p class="helper-text">إجابتك تحدد شكل المنصة لراحتك النفسية</p>
-        </div>
-    </div>
+/* 1. النمط الرسمي (Official) - أزرق وأبيض */
+body.theme-official {
+    --bg-color: #f0f9ff;
+    --text-color: #0f172a;
+    --primary-color: #0369a1;
+    --secondary-color: #0ea5e9;
+    --card-bg: #ffffff;
+    --border-color: #bae6fd;
+    --header-bg: #ffffff;
+}
 
-    <header class="official-header">
-        <div class="header-content">
-            <div class="republic">الجمهورية الجزائرية الديمقراطية الشعبية</div>
-            <div class="ministry">وزارة التعليم العالي والبحث العلمي</div>
-            
-            <div class="university-info">
-                <div class="logo-box">
-                    <i class="fa-solid fa-scale-balanced"></i>
-                </div>
-                <div class="text-info">
-                    <h1>جامعة الدكتور مولاي الطاهر - ولاية سعيدة</h1>
-                    <h2>كلية الحقوق والعلوم السياسية</h2>
-                    <h3 class="spec">تخصص: الحقوق</h3>
-                </div>
-            </div>
-        </div>
-    </header>
+/* 2. النمط الليلي (Dark/Focus) - للتركيز العالي */
+body.theme-dark {
+    --bg-color: #0f172a;
+    --text-color: #e2e8f0;
+    --primary-color: #38bdf8;
+    --secondary-color: #7dd3fc;
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    --header-bg: #1e293b;
+    --header-text: #ffffff;
+    --accent: #fcd34d;
+}
 
-    <section class="welcome-bar">
-        <div class="student-info">
-            <span>من إعداد الطالب:</span>
-            <strong class="student-name">بولنوار ميلود</strong>
-        </div>
-        <div class="date-display" id="currentDate"></div>
-    </section>
+/* 3. النمط الهادئ (Calm) - أخضر فاتح للراحة */
+body.theme-calm {
+    --bg-color: #f1fdf5;
+    --text-color: #14532d;
+    --primary-color: #15803d;
+    --secondary-color: #22c55e;
+    --card-bg: #ffffff;
+    --border-color: #bbf7d0;
+    --header-bg: #f0fdf4;
+    --accent: #166534;
+}
 
-    <main class="platform-container">
-        
-        <div class="search-section">
-            <input type="text" placeholder="ابحث في المحاضرات أو المواد القانونية..." id="searchInput">
-            <button><i class="fa-solid fa-magnifying-glass"></i> بحث</button>
-        </div>
+/* 4. نمط القارئ (Reader) - ألوان الورق القديم */
+body.theme-reader {
+    --bg-color: #fdf6e3; /* سيبيا */
+    --text-color: #5d4037;
+    --primary-color: #8d6e63;
+    --secondary-color: #a1887f;
+    --card-bg: #fff8e1;
+    --border-color: #e6dbb9;
+    --header-bg: #fff8e1;
+    --accent: #bf360c;
+}
 
-        <div class="grid-menu">
-            <div class="card" onclick="openSection('lectures')">
-                <div class="icon"><i class="fa-solid fa-book-open"></i></div>
-                <h3>المحاضرات</h3>
-                <p>دروس ومطبوعات لجميع المقاييس</p>
-            </div>
+/* --- التنسيق العام --- */
+body {
+    margin: 0; font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-color); color: var(--text-color);
+    direction: rtl; transition: background 0.8s ease, color 0.8s ease;
+}
 
-            <div class="card" onclick="openSection('laws')">
-                <div class="icon"><i class="fa-solid fa-gavel"></i></div>
-                <h3>النصوص القانونية</h3>
-                <p>الدستور، القانون المدني، العقوبات...</p>
-            </div>
+/* شاشة الأسئلة (Onboarding) */
+.onboarding-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #0f172a; color: white; z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+    transition: opacity 1s ease-in-out, visibility 1s;
+}
+.onboarding-content { text-align: center; max-width: 600px; padding: 20px; width: 90%; }
+.question-title { font-size: 1.5rem; margin-bottom: 30px; font-family: 'Amiri'; color: #e2e8f0; }
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+.option-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px; color: #94a3b8; cursor: pointer; border-radius: 12px;
+    font-family: 'Cairo'; transition: 0.3s; font-size: 1rem;
+}
+.option-btn:hover { background: #38bdf8; color: #0f172a; transform: translateY(-3px); }
+.logo-animation { font-size: 3rem; margin-bottom: 20px; color: #38bdf8; animation: pulse 2s infinite; }
+.progress-container { width: 100%; height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: #38bdf8; transition: width 0.3s; }
+.helper-text { margin-top: 15px; color: #64748b; font-size: 0.8rem; }
+.hidden-overlay { opacity: 0; visibility: hidden; }
 
-            <div class="card" onclick="openSection('exams')">
-                <div class="icon"><i class="fa-solid fa-file-pen"></i></div>
-                <h3>الامتحانات</h3>
-                <p>نماذج امتحانات سابقة وحلولها</p>
-            </div>
+/* الترويسة الرسمية */
+.official-header {
+    background: var(--header-bg); color: var(--header-text);
+    text-align: center; padding: 20px;
+    border-bottom: 4px solid var(--primary-color);
+    font-family: 'Amiri', serif;
+    background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+.republic, .ministry { font-size: 1rem; margin-bottom: 5px; opacity: 0.8; }
+.university-info {
+    margin-top: 20px; border: 2px solid var(--primary-color);
+    padding: 20px; border-radius: 10px; display: inline-block;
+    min-width: 60%; position: relative;
+}
+.logo-box { font-size: 3rem; color: var(--primary-color); margin-bottom: 10px; }
+.university-info h1 { font-size: 1.6rem; margin: 0; color: var(--primary-color); font-weight: bold; }
+.university-info h2 { font-size: 1.3rem; margin: 5px 0; opacity: 0.9; }
+.spec { color: var(--accent); text-decoration: underline; margin-top: 10px; }
 
-            <div class="card" onclick="openSection('methodology')">
-                <div class="icon"><i class="fa-solid fa-pen-nib"></i></div>
-                <h3>المنهجية</h3>
-                <p>كيفية إعداد البحوث والتعليق على الأحكام</p>
-            </div>
-        </div>
+/* شريط الطالب */
+.welcome-bar {
+    background: var(--primary-color); color: white;
+    padding: 15px 5%; display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.student-name { color: var(--accent); margin-right: 5px; font-size: 1.2rem; }
 
-        <div id="content-area" class="content-display hidden">
-            <h2 id="section-title">عنوان القسم</h2>
-            <div class="placeholder-content">
-                <i class="fa-solid fa-folder-open big-icon"></i>
-                <p>هذا القسم جاهز لإضافة الملفات بصيغة PDF.</p>
-            </div>
-            <button class="close-btn" onclick="closeSection()">عودة للقائمة</button>
-        </div>
+/* المنصة */
+.platform-container { padding: 30px 5%; max-width: 1200px; margin: 0 auto; min-height: 60vh; }
 
-    </main>
+.search-section { display: flex; gap: 10px; margin-bottom: 40px; }
+.search-section input {
+    flex: 1; padding: 15px; border: 1px solid var(--border-color);
+    background: var(--card-bg); color: var(--text-color);
+    border-radius: 8px; font-family: 'Cairo';
+}
+.search-section button {
+    background: var(--accent); color: white; border: none;
+    padding: 0 25px; border-radius: 8px; cursor: pointer; font-family: 'Cairo';
+}
 
-    <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026 | جامعة سعيدة - الحقوق</p>
-    </footer>
+.grid-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.card {
+    background: var(--card-bg); padding: 25px; border-radius: 12px;
+    text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color); cursor: pointer; transition: 0.3s;
+}
+.card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+.card .icon { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 15px; }
 
-    <script src="script.js"></script>
-</body>
-</html>
+.content-display {
+    background: var(--card-bg); padding: 30px; border-radius: 12px;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1); border-top: 4px solid var(--accent);
+    text-align: center;
+}
+.big-icon { font-size: 4rem; color: var(--border-color); margin-bottom: 20px; }
+.close-btn {
+    background: #ef4444; color: white; border: none; padding: 10px 20px;
+    border-radius: 5px; cursor: pointer; margin-top: 20px; font-family: 'Cairo';
+}
+
+.hidden { display: none; }
+footer { text-align: center; padding: 20px; background: var(--primary-color); color: white; margin-top: 50px; font-size: 0.9rem; }
+
+@keyframes pulse { 0% {transform: scale(1);} 50% {transform: scale(1.1);} 100% {transform: scale(1);} }
+@media (max-width: 600px) { .university-info { min-width: 90%; } .welcome-bar { flex-direction: column; gap: 10px; text-align: center; } .options-grid { grid-template-columns: 1fr; } }
