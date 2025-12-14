@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>بوابة الأفكار القانونية</title>
+  <style>
+    /* =========================
+       Base + Theme System
+    ========================== */
+    :root{
+      --bg: #0b0f17;
+      --surface: rgba(255,255,255,.08);
+      --surface-2: rgba(255,255,255,.12);
+      --text: #e9eef7;
+      --muted: rgba(233,238,247,.75);
+      --accent: #7c5cff;
+      --accent-2: #00d1ff;
+      --good: #3ee6a8;
+      --danger: #ff4d6d;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius-sm: 12px;
+
+      --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", "Noto Sans", Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    /* Themes chosen by psychographic analysis */
+    [data-theme="formal"]{
+      --bg:#0c1118;
+      --surface: rgba(255,255,255,.07);
+      --surface-2: rgba(255,255,255,.11);
+      --text:#eef2f7;
+      --muted: rgba(238,242,247,.72);
+      --accent:#3a86ff;
+      --accent-2:#00b4d8;
+    }
+    [data-theme="nightFocus"]{
+      --bg:#070a12;
+      --surface: rgba(90,120,255,.08);
+      --surface-2: rgba(120,90,255,.10);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,.70);
+      --accent:#7c5cff;
+      --accent-2:#00d1ff;
+    }
+    [data-theme="natureCalm"]{
+      --bg:#07130e;
+      --surface: rgba(120,255,180,.07);
+      --surface-2: rgba(120,255,180,.10);
+      --text:#eafff3;
+      --muted: rgba(234,255,243,.72);
+      --accent:#2dd4bf;
+      --accent-2:#7cffa6;
+    }
+    [data-theme="reading"]{
+      --bg:#0f0e0c;
+      --surface: rgba(255,235,200,.08);
+      --surface-2: rgba(255,235,200,.12);
+      --text:#fff6ea;
+      --muted: rgba(255,246,234,.70);
+      --accent:#ffb703;
+      --accent-2:#fb8500;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: var(--font);
+      background: radial-gradient(1200px 700px at 50% 20%, rgba(124,92,255,.12), transparent 60%),
+                  radial-gradient(900px 600px at 80% 90%, rgba(0,209,255,.10), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    a,button,input,textarea,select{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none !important}
+
+    .app{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding: 18px;
+    }
+
+    /* =========================
+       Scene 1: Cinematic Intro
+    ========================== */
+    .scene{
+      position:relative;
+      width:min(980px, 100%);
+      height: min(680px, 85vh);
+      border-radius: 26px;
+      overflow:hidden;
+      background: #000;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .scene::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(900px 500px at 50% 15%, rgba(255,255,255,.04), transparent 60%),
+        linear-gradient(to bottom, rgba(255,255,255,.02), transparent 40%),
+        #000;
+      opacity: 1;
+      transition: opacity .8s ease;
+      pointer-events:none;
+    }
+
+    /* Light overlay that gradually reveals */
+    .lightCone{
+      position:absolute; inset:0;
+      background:
+        radial-gradient(380px 520px at 55% 26%, rgba(255,246,210,0.25), transparent 60%),
+        radial-gradient(260px 420px at 55% 28%, rgba(255,220,120,0.22), transparent 58%),
+        radial-gradient(120px 160px at 55% 16%, rgba(255,240,200,0.35), transparent 62%);
+      opacity: 0;
+      transition: opacity 1.4s ease;
+      pointer-events:none;
+      filter: blur(0.2px);
+    }
+
+    .scene[data-stage="lit"] .lightCone{ opacity: 1; }
+    .scene[data-stage="lit"]::before{ opacity: .65; }
+
+    /* Floor hint */
+    .floor{
+      position:absolute; inset:auto 0 0 0;
+      height: 160px;
+      background: linear-gradient(to top, rgba(255,255,255,.06), transparent 70%);
+      opacity:.35;
+      pointer-events:none;
+    }
+
+    /* Ladder */
+    .ladder{
+      position:absolute;
+      left: 14%;
+      bottom: 90px;
+      width: 240px;
+      height: 520px;
+      transform: skewX(-4deg);
+      opacity: .9;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,.6));
+    }
+    .ladder .rail{
+      position:absolute;
+      top:0; bottom:0;
+      width: 14px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,.10));
+      border-radius: 12px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.35);
+    }
+    .ladder .rail.left{ left: 30px; }
+    .ladder .rail.right{ right: 30px; }
+    .ladder .rungs{
+      position:absolute; inset: 26px 48px 26px 48px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 14px;
+    }
+    .ladder .rung{
+      height: 10px;
+      border-radius: 10px;
+      background: linear-gradient(to right, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.35);
+    }
+
+    /* Bulb + cord */
+    .bulbRig{
+      position:absolute;
+      left: 58%;
+      top: 32px;
+      width: 220px;
+      height: 240px;
+      pointer-events:none;
+    }
+    .cord{
+      position:absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 126px;
+      background: rgba(255,255,255,.18);
+      transform: translateX(-50%);
+    }
+    .pullString{
+      position:absolute;
+      left: 50%;
+      top: 110px;
+      width: 2px;
+      height: 86px;
+      background: rgba(255,255,255,.22);
+      transform: translateX(-50%);
+      transform-origin: top;
+      opacity:.75;
+    }
+    .knob{
+      position:absolute;
+      left: 50%;
+      top: 188px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.35);
+      transform: translateX(-50%);
+      box-shadow: 0 8px 18px rgba(0,0,0,.6);
+    }
+    .bulb{
+      position:absolute;
+      left: 50%;
+      top: 118px;
+      width: 66px;
+      height: 86px;
+      transform: translateX(-50%);
+      border-radius: 40px 40px 32px 32px;
+      background: radial-gradient(circle at 50% 35%, rgba(255,255,255,.10), rgba(255,255,255,.05) 50%, rgba(255,255,255,.03));
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 20px 40px rgba(0,0,0,.65);
+    }
+    .bulb::after{
+      content:"";
+      position:absolute; left:50%; bottom:-18px;
+      width: 34px; height: 22px;
+      transform: translateX(-50%);
+      border-radius: 10px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      border: 1px solid rgba(0,0,0,.35);
+    }
+
+    /* Character (CSS Art) */
+    .climberWrap{
+      position:absolute;
+      left: 18%;
+      bottom: 110px;
+      width: 160px;
+      height: 280px;
+      transform: translateY(0);
+      transition: transform .2s linear;
+    }
+    .climber{
+      position:absolute;
+      left: 50%;
+      bottom: 0;
+      width: 84px;
+      height: 180px;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 18px 26px rgba(0,0,0,.65));
+    }
+    .head{
+      position:absolute;
+      left: 50%;
+      top: 0;
+      width: 44px;
+      height: 44px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.16), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .torso{
+      position:absolute;
+      left: 50%;
+      top: 46px;
+      width: 52px;
+      height: 64px;
+      transform: translateX(-50%);
+      border-radius: 16px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .belt{
+      position:absolute;
+      left: 50%;
+      top: 98px;
+      width: 52px; height: 8px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.35);
+      border-radius: 10px;
+    }
+    .hip{
+      position:absolute;
+      left: 50%;
+      top: 108px;
+      width: 44px;
+      height: 22px;
+      transform: translateX(-50%);
+      border-radius: 14px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .arm, .leg{
+      position:absolute;
+      width: 14px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.14), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 12px;
+      transform-origin: top;
+    }
+
+    .arm.left{ left: 6px; top: 56px; height: 66px; }
+    .arm.right{ right: 6px; top: 56px; height: 66px; }
+
+    .leg.left{ left: 22px; top: 122px; height: 72px; transform-origin: top; }
+    .leg.right{ right: 22px; top: 122px; height: 72px; }
+
+    .hand, .foot{
+      position:absolute;
+      left: 50%;
+      bottom: -10px;
+      width: 18px;
+      height: 14px;
+      transform: translateX(-50%);
+      border-radius: 10px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+
+    /* Climbing animation: alternating limbs + slight torso sway */
+    @keyframes armA { 0%,100%{ transform: rotate(18deg) } 50%{ transform: rotate(-22deg) } }
+    @keyframes armB { 0%,100%{ transform: rotate(-18deg)} 50%{ transform: rotate(22deg) } }
+    @keyframes legA { 0%,100%{ transform: rotate(-10deg)} 50%{ transform: rotate(18deg) } }
+    @keyframes legB { 0%,100%{ transform: rotate(10deg) } 50%{ transform: rotate(-18deg)} }
+    @keyframes bodySway { 0%,100%{ transform: translateX(-50%) rotate(1.3deg)} 50%{ transform: translateX(-50%) rotate(-1.3deg)} }
+
+    .climbing .arm.left{ animation: armA .52s ease-in-out infinite; }
+    .climbing .arm.right{ animation: armB .52s ease-in-out infinite; }
+    .climbing .leg.left{ animation: legA .52s ease-in-out infinite; }
+    .climbing .leg.right{ animation: legB .52s ease-in-out infinite; }
+    .climbing .torso{ animation: bodySway .52s ease-in-out infinite; }
+
+    /* Reach animation to cord (after climb) */
+    @keyframes reach {
+      0%{ transform: rotate(10deg) }
+      100%{ transform: rotate(-55deg) }
+    }
+    .reaching .arm.right{ animation: reach .55s ease forwards; }
+    .reaching .arm.left{ animation: none; transform: rotate(12deg); }
+    .reaching .leg.left, .reaching .leg.right{ animation:none; transform: rotate(0deg); }
+    .reaching .torso{ animation:none; }
+
+    /* Pull cord swing */
+    @keyframes cordPull {
+      0%{ transform: translateX(-50%) rotate(0deg); }
+      25%{ transform: translateX(-50%) rotate(7deg); }
+      50%{ transform: translateX(-50%) rotate(-6deg); }
+      100%{ transform: translateX(-50%) rotate(0deg); }
+    }
+    .scene[data-stage="pulling"] .pullString{ animation: cordPull .7s ease; }
+
+    /* UI overlays in scene */
+    .introHUD{
+      position:absolute;
+      inset: 0;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding: 22px;
+      pointer-events:none;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      opacity:.9;
+    }
+    .brand h1{
+      margin:0;
+      font-size: clamp(16px, 2.3vw, 22px);
+      letter-spacing:.2px;
+    }
+    .brand .tag{
+      font-size: 13px;
+      color: rgba(255,255,255,.65);
+      border:1px solid rgba(255,255,255,.10);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(8px);
+    }
+
+    .controls{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      pointer-events:auto;
+    }
+    .btn{
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 26px rgba(0,0,0,.35);
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.24); }
+    .btn:active{ transform: translateY(0px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(124,92,255,.35), rgba(0,209,255,.20));
+      border-color: rgba(124,92,255,.55);
+    }
+    .btn.fancy{
+      font-weight: 700;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+      border-color: rgba(255,255,255,.22);
+      display:none;
+    }
+    .scene[data-stage="lit"] .btn.fancy{ display:inline-flex; }
+
+    .hint{
+      color: rgba(255,255,255,.65);
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 54ch;
+      margin: 0;
+    }
+
+    /* Fade out scene */
+    .scene.fadeOut{
+      animation: fadeOut .75s ease forwards;
+    }
+    @keyframes fadeOut{ to{ opacity:0; transform: translateY(6px) scale(.995);} }
+
+    /* =========================
+       Modal
+    ========================== */
+    .modalBackdrop{
+      position: fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modalBackdrop.show{ display:flex; }
+    .modal{
+      width: min(720px, 100%);
+      border-radius: 22px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modalHeader{
+      padding: 16px 18px;
+      background: rgba(0,0,0,.22);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .modalHeader h2{ margin:0; font-size: 16px; }
+    .x{
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      width: 40px; height: 40px;
+      border-radius: 12px;
+    }
+    .modalBody{ padding: 16px 18px; }
+    .grid{
+      display:grid;
+      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .field{ display:flex; flex-direction:column; gap: 6px; }
+    label{ font-size: 13px; color: var(--muted); }
+    input, textarea{
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    input:focus, textarea:focus{
+      border-color: rgba(124,92,255,.55);
+      background: rgba(0,0,0,.32);
+    }
+    textarea{ min-height: 120px; resize: vertical; }
+    .modalFooter{
+      padding: 14px 18px;
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+    }
+    .note{ font-size: 12px; color: rgba(233,238,247,.62); line-height:1.6; }
+
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+      .ladder{ left: 8%; transform: skewX(-2deg) scale(.95); }
+      .bulbRig{ left: 52%; }
+    }
+
+    /* =========================
+       Scene 2: Psychographic UI
+    ========================== */
+    .panel{
+      width: min(980px, 100%);
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:none;
+    }
+    .panel.show{ display:block; animation: panelIn .55s ease both; }
+    @keyframes panelIn{
+      from{ opacity:0; transform: translateY(10px) scale(.99); }
+      to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+    .panelTop{
+      padding: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(800px 280px at 30% 0%, rgba(124,92,255,.16), transparent 60%),
+        radial-gradient(800px 280px at 90% 30%, rgba(0,209,255,.10), transparent 62%),
+        rgba(0,0,0,.18);
+    }
+    .panelTop h2{ margin:0 0 6px 0; font-size: 18px; }
+    .panelTop p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+    .qa{
+      padding: 18px;
+      display:grid;
+      gap: 14px;
+    }
+    .card{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      padding: 14px;
+    }
+    .q{
+      margin:0 0 10px 0;
+      font-size: 14px;
+      color: rgba(233,238,247,.92);
+    }
+    .options{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+    .opt{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;
+    }
+    .opt:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); }
+    .opt input{ width: 16px; height: 16px; }
+    .opt span{ font-size: 13px; color: var(--text); }
+
+    @media (max-width: 720px){
+      .options{ grid-template-columns: 1fr; }
+    }
+
+    /* =========================
+       Dashboard
+    ========================== */
+    .dash{
+      width: min(1120px, 100%);
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:none;
+    }
+    .dash.show{ display:block; animation: panelIn .55s ease both; }
+
+    .header{
+      padding: 18px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.04)),
+        radial-gradient(800px 250px at 30% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 62%),
+        radial-gradient(800px 250px at 90% 40%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 65%);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .headerLines{
+      line-height: 1.9;
+      color: rgba(233,238,247,.90);
+      font-size: 13px;
+      text-align:center;
+      margin-bottom: 10px;
+    }
+    .headerLines strong{ color: var(--text); }
+    .metaRow{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      border-top: 1px solid rgba(255,255,255,.10);
+      padding-top: 12px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.22);
+      color: rgba(233,238,247,.92);
+      font-size: 13px;
+    }
+    .badge b{ color: var(--text); }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent) 20%, rgba(0,0,0,.22)),
+        color-mix(in srgb, var(--accent-2) 14%, rgba(0,0,0,.22))
+      );
+      font-size: 13px;
+    }
+
+    .content{
+      padding: 18px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+    .tile{
+      grid-column: span 6;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      padding: 14px;
+      min-height: 120px;
+      position:relative;
+      overflow:hidden;
+    }
+    .tile::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(500px 220px at 20% 0%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 55%),
+                  radial-gradient(500px 220px at 80% 30%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 55%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .tile h3{ margin:0 0 6px 0; font-size: 15px; position:relative; }
+    .tile p{ margin:0; color: var(--muted); font-size: 13px; line-height:1.7; position:relative; }
+    .tile .actions{ margin-top: 12px; display:flex; gap: 10px; flex-wrap:wrap; position:relative; }
+    .mini{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-size: 13px;
+    }
+    .mini.primary{
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--accent) 35%, rgba(255,255,255,.06)),
+        color-mix(in srgb, var(--accent-2) 18%, rgba(255,255,255,.04))
+      );
+      border-color: color-mix(in srgb, var(--accent) 50%, rgba(255,255,255,.16));
+    }
+
+    @media (max-width: 880px){
+      .tile{ grid-column: span 12; }
+    }
+  </style>
+</head>
+
+<body data-theme="nightFocus">
+  <div class="app">
+
+    <!-- Scene 1 -->
+    <section class="scene" id="scene" data-stage="dark" aria-label="المشهد الافتتاحي">
+      <div class="lightCone" aria-hidden="true"></div>
+      <div class="floor" aria-hidden="true"></div>
+
+      <div class="ladder" aria-hidden="true">
+        <div class="rail left"></div>
+        <div class="rail right"></div>
+        <div class="rungs">
+          <div class="rung"></div><div class="rung"></div><div class="rung"></div><div class="rung"></div>
+          <div class="rung"></div><div class="rung"></div><div class="rung"></div><div class="rung"></div>
+          <div class="rung"></div><div class="rung"></div><div class="rung"></div><div class="rung"></div>
+        </div>
+      </div>
+
+      <div class="bulbRig" aria-hidden="true">
+        <div class="cord"></div>
+        <div class="pullString" id="pullString"></div>
+        <div class="knob"></div>
+        <div class="bulb"></div>
+      </div>
+
+      <div class="climberWrap" id="climberWrap" aria-hidden="true">
+        <div class="climber" id="climber">
+          <div class="head"></div>
+          <div class="torso"></div>
+          <div class="belt"></div>
+          <div class="hip"></div>
+
+          <div class="arm left"><div class="hand"></div></div>
+          <div class="arm right"><div class="hand"></div></div>
+
+          <div class="leg left"><div class="foot"></div></div>
+          <div class="leg right"><div class="foot"></div></div>
+        </div>
+      </div>
+
+      <div class="introHUD">
+        <div class="brand">
+          <h1>بوابة الأفكار القانونية</h1>
+          <div class="tag">Story + UX + Psychology</div>
+        </div>
+
+        <div class="controls">
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn primary" id="startBtn">بدء التجربة</button>
+            <button class="btn fancy" id="thinkBtn">في ماذا تفكر؟</button>
+          </div>
+          <p class="hint" id="hint">
+            مشهد غامض… شخصية تصعد السلم لتسحب خيط اللمبة. بعد الإضاءة ستظهر بوابة “في ماذا تفكر؟”.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal: Data + Idea -->
+    <div class="modalBackdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="نافذة جمع البيانات">
+      <div class="modal">
+        <div class="modalHeader">
+          <h2>جمع البيانات والفكرة الإبداعية</h2>
+          <button class="x" id="closeModal" aria-label="إغلاق">×</button>
+        </div>
+        <form id="ideaForm">
+          <div class="modalBody">
+            <div class="grid">
+              <div class="field">
+                <label for="firstName">الاسم</label>
+                <input id="firstName" name="firstName" autocomplete="given-name" required />
+              </div>
+              <div class="field">
+                <label for="lastName">اللقب</label>
+                <input id="lastName" name="lastName" autocomplete="family-name" required />
+              </div>
+              <div class="field" style="grid-column: 1 / -1;">
+                <label for="email">البريد الإلكتروني</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </div>
+              <div class="field" style="grid-column: 1 / -1;">
+                <label for="idea">فكرتك الإبداعية</label>
+                <textarea id="idea" name="idea" placeholder="اكتب الفكرة هنا…" required></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modalFooter">
+            <div class="note">
+              سيتم حفظ البيانات محلياً (LocalStorage) وتنزيل ملف JSON فوراً.
+            </div>
+            <button class="btn primary" type="submit">إرسال وتنزيل JSON</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Psychographic Analysis -->
+    <section class="panel" id="psyPanel" aria-label="مرحلة التحليل النفسي">
+      <div class="panelTop">
+        <h2>أسئلة قصيرة… لتحديد نمط الدراسة الأنسب</h2>
+        <p>أسئلة غير مباشرة (بدون سؤال صريح عن الألوان). أجب بسرعة بما يشبهك.</p>
+      </div>
+
+      <form class="qa" id="psyForm">
+        <div class="card">
+          <p class="q">1) عندما تريد التركيز، أي “بيئة” تشعرك بالثبات؟</p>
+          <div class="options">
+            <label class="opt"><input type="radio" name="q1" value="night" required><span>هدوء الليل وإضاءة خافتة</span></label>
+            <label class="opt"><input type="radio" name="q1" value="formal"><span>مكتب مرتب وإضاءة واضحة</span></label>
+            <label class="opt"><input type="radio" name="q1" value="nature"><span>هواء طبيعي ونباتات</span></label>
+            <label class="opt"><input type="radio" name="q1" value="reading"><span>ركن قراءة دافئ وهادئ</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="q">2) أي “صوت” يريحك أثناء المراجعة؟</p>
+          <div class="options">
+            <label class="opt"><input type="radio" name="q2" value="night" required><span>صمت شبه تام</span></label>
+            <label class="opt"><input type="radio" name="q2" value="nature"><span>مطر خفيف / طبيعة</span></label>
+            <label class="opt"><input type="radio" name="q2" value="reading"><span>تقليب صفحات / قلم</span></label>
+            <label class="opt"><input type="radio" name="q2" value="formal"><span>همس عمل / مكتب</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="q">3) عندما تتعقد مادة قانونية، كيف تحب تفكيكها؟</p>
+          <div class="options">
+            <label class="opt"><input type="radio" name="q3" value="formal" required><span>خطوات منهجية وبنود واضحة</span></label>
+            <label class="opt"><input type="radio" name="q3" value="reading"><span>قراءة متأنية مع تمييز وتعليقات</span></label>
+            <label class="opt"><input type="radio" name="q3" value="night"><span>تركيز عميق بعيداً عن المشتتات</span></label>
+            <label class="opt"><input type="radio" name="q3" value="nature"><span>استراحة قصيرة ثم عودة بهدوء</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="q">4) أي “إحساس عام” تبحث عنه داخل منصة تعليمية؟</p>
+          <div class="options">
+            <label class="opt"><input type="radio" name="q4" value="nature" required><span>اتساع وراحة للعين</span></label>
+            <label class="opt"><input type="radio" name="q4" value="night"><span>عمق وهدوء</span></label>
+            <label class="opt"><input type="radio" name="q4" value="formal"><span>جدية وتنظيم</span></label>
+            <label class="opt"><input type="radio" name="q4" value="reading"><span>دفء وقابلية للقراءة</span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="q">5) متى تشعر أنك في أفضل أداء للدراسة؟</p>
+          <div class="options">
+            <label class="opt"><input type="radio" name="q5" value="night" required><span>ليلاً</span></label>
+            <label class="opt"><input type="radio" name="q5" value="formal"><span>صباحاً مع خطة يومية</span></label>
+            <label class="opt"><input type="radio" name="q5" value="nature"><span>بعد حركة خفيفة/هواء</span></label>
+            <label class="opt"><input type="radio" name="q5" value="reading"><span>أي وقت… إذا كان كل شيء مريحاً للقراءة</span></label>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <button class="btn" type="button" id="backToIntro">العودة للمشهد</button>
+          <button class="btn primary" type="submit">إنهاء التحليل وفتح المنصة</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="dash" id="dashboard" aria-label="لوحة التحكم">
+      <div class="header">
+        <div class="headerLines">
+          <strong>الجمهورية الجزائرية الديمقراطية الشعبية</strong><br/>
+          وزارة التعليم العالي والبحث العلمي<br/>
+          جامعة الدكتور مولاي الطاهر - ولاية سعيدة<br/>
+          كلية الحقوق والعلوم السياسية (تخصص حقوق)
+        </div>
+
+        <div class="metaRow">
+          <div class="badge">مُعد المنصة: <b>بولنوار ميلود</b></div>
+          <div class="badge">الزائر: <b id="visitorName">—</b></div>
+          <div class="pill">النمط النفسي: <span id="themeLabel">—</span></div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="tile">
+          <h3>المحاضرات</h3>
+          <p>وصول سريع للمحاضرات حسب السداسي والمقياس، مع ترتيب واضح وسهل.</p>
+          <div class="actions">
+            <button class="mini primary" type="button">فتح المحاضرات</button>
+            <button class="mini" type="button">إضافة رابط</button>
+          </div>
+        </div>
+
+        <div class="tile">
+          <h3>النصوص القانونية</h3>
+          <p>قوانين، مراسيم، قرارات… مع إمكانية البحث والترميز لاحقاً.</p>
+          <div class="actions">
+            <button class="mini primary" type="button">تصفح النصوص</button>
+            <button class="mini" type="button">بحث سريع</button>
+          </div>
+        </div>
+
+        <div class="tile">
+          <h3>الامتحانات</h3>
+          <p>نماذج امتحانات سابقة + مقترحات تنظيم المراجعة.</p>
+          <div class="actions">
+            <button class="mini primary" type="button">فتح الامتحانات</button>
+            <button class="mini" type="button">رفع ملف</button>
+          </div>
+        </div>
+
+        <div class="tile">
+          <h3>المنهجية</h3>
+          <p>منهجية التعليق على قرار، تحليل نص، مقالة قانونية… بأسلوب مبسط.</p>
+          <div class="actions">
+            <button class="mini primary" type="button">بدء المنهجية</button>
+            <button class="mini" type="button">خطة أسبوعية</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // =========================
+    // Helpers
+    // =========================
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    function downloadJSON(filename, obj){
+      const json = JSON.stringify(obj, null, 2);
+      const blob = new Blob([json], {type:"application/json;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function safeTrim(v){ return String(v ?? "").trim(); }
+
+    // =========================
+    // Scene logic
+    // =========================
+    const scene = $("#scene");
+    const startBtn = $("#startBtn");
+    const thinkBtn = $("#thinkBtn");
+    const hint = $("#hint");
+
+    const climberWrap = $("#climberWrap");
+    const climber = $("#climber");
+    const modalBackdrop = $("#modalBackdrop");
+    const closeModal = $("#closeModal");
+    const ideaForm = $("#ideaForm");
+
+    const psyPanel = $("#psyPanel");
+    const psyForm = $("#psyForm");
+    const backToIntro = $("#backToIntro");
+
+    const dashboard = $("#dashboard");
+    const visitorNameEl = $("#visitorName");
+    const themeLabelEl = $("#themeLabel");
+
+    let state = {
+      student: null,
+      theme: null
+    };
+
+    // Restore if exists
+    const stored = localStorage.getItem("legalIdeasGate_v1");
+    if (stored){
+      try{
+        state = JSON.parse(stored);
+        if (state?.student?.firstName){
+          // prefill name in dashboard later
+        }
+        if (state?.theme){
+          applyTheme(state.theme);
+        }
+      }catch{}
+    }
+
+    function persist(){
+      localStorage.setItem("legalIdeasGate_v1", JSON.stringify(state));
+    }
+
+    function applyTheme(themeKey){
+      const map = {
+        formal: "رسمي",
+        nightFocus: "ليلي للتركيز",
+        natureCalm: "هادئ للطبيعة",
+        reading: "نمط القراءة"
+      };
+      document.body.setAttribute("data-theme", themeKey);
+      themeLabelEl.textContent = map[themeKey] ?? themeKey;
+    }
+
+    function showModal(){
+      modalBackdrop.classList.add("show");
+      // Focus first field
+      setTimeout(()=> $("#firstName")?.focus(), 0);
+    }
+    function hideModal(){
+      modalBackdrop.classList.remove("show");
+    }
+
+    // Cinematic: climb then reach then pull then light on
+    async function runIntroSequence(){
+      startBtn.disabled = true;
+      hint.textContent = "تبدأ الشخصية بالصعود… حركة بطيئة ومنطقية، ثم تمد يدها لخيط التشغيل.";
+
+      // Stage: climbing
+      scene.dataset.stage = "climbing";
+      climber.classList.add("climbing");
+
+      // Animate ascent (no jump): smooth translateY upwards
+      // Distance tuned to ladder height on screen; responsive-friendly.
+      const ascentPx = Math.min(340, scene.clientHeight * 0.55);
+      const durationMs = 3600; // human-like effort
+      const start = performance.now();
+
+      await new Promise(resolve=>{
+        function step(t){
+          const p = Math.min(1, (t - start) / durationMs);
+          // easeInOut
+          const eased = p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p+2,2)/2;
+          climberWrap.style.transform = `translateY(${-ascentPx * eased}px)`;
+          if (p < 1) requestAnimationFrame(step);
+          else resolve();
+        }
+        requestAnimationFrame(step);
+      });
+
+      // Stop climb, start reach
+      climber.classList.remove("climbing");
+      scene.dataset.stage = "reaching";
+      climber.classList.add("reaching");
+
+      await new Promise(r=>setTimeout(r, 650));
+
+      // Pull cord (swing) and light on gradually
+      scene.dataset.stage = "pulling";
+      await new Promise(r=>setTimeout(r, 260));
+      scene.dataset.stage = "lit";
+      hint.textContent = "الضوء يكشف البوابة… اضغط “في ماذا تفكر؟” لإرسال فكرتك.";
+
+      // Enable think button
+      thinkBtn.disabled = false;
+      startBtn.textContent = "تمت الإضاءة";
+    }
+
+    startBtn.addEventListener("click", ()=>{
+      if (scene.dataset.stage !== "dark") return;
+      runIntroSequence();
+    });
+
+    thinkBtn.addEventListener("click", ()=>{
+      if (scene.dataset.stage !== "lit") return;
+      showModal();
+    });
+
+    closeModal.addEventListener("click", hideModal);
+    modalBackdrop.addEventListener("click", (e)=>{
+      if (e.target === modalBackdrop) hideModal();
+    });
+
+    ideaForm.addEventListener("submit", (e)=>{
+      e.preventDefault();
+
+      const firstName = safeTrim($("#firstName").value);
+      const lastName  = safeTrim($("#lastName").value);
+      const email     = safeTrim($("#email").value);
+      const idea      = safeTrim($("#idea").value);
+
+      const submission = {
+        platform: "بوابة الأفكار القانونية",
+        university: "جامعة الدكتور مولاي الطاهر - ولاية سعيدة",
+        faculty: "كلية الحقوق والعلوم السياسية (تخصص حقوق)",
+        student: { firstName, lastName, email },
+        idea,
+        submittedAt: new Date().toISOString()
+      };
+
+      state.student = submission.student;
+      persist();
+
+      const fileSafeName = `${firstName || "طالب"}_${lastName || "مجهول"}_idea.json`
+        .replaceAll(" ", "_")
+        .replace(/[^\w\u0600-\u06FF\-_.]/g, "_");
+
+      downloadJSON(fileSafeName, submission);
+      hideModal();
+
+      // Transition: hide scene smoothly, show psych panel
+      scene.classList.add("fadeOut");
+      setTimeout(()=>{
+        scene.classList.add("hidden");
+        psyPanel.classList.add("show");
+        // prefill dashboard visitor name later
+      }, 760);
+    });
+
+    backToIntro.addEventListener("click", ()=>{
+      psyPanel.classList.remove("show");
+      scene.classList.remove("hidden");
+      // bring back scene visible
+      scene.classList.remove("fadeOut");
+    });
+
+    // =========================
+    // Psychographic analysis
+    // =========================
+    function computeThemeFromAnswers(ans){
+      // Score-based mapping (simple, transparent)
+      const score = { formal:0, nightFocus:0, natureCalm:0, reading:0 };
+
+      const map = {
+        formal: "formal",
+        night: "nightFocus",
+        nature:"natureCalm",
+        reading:"reading"
+      };
+
+      // each answer increments its mapped theme
+      Object.values(ans).forEach(v=>{
+        const key = map[v];
+        if (key) score[key] += 1;
+      });
+
+      // Tie-breakers: prefer reading if q3=reading and q4=reading, else nightFocus if q1 or q5 night
+      let best = "formal";
+      let bestVal = -1;
+      for (const [k,v] of Object.entries(score)){
+        if (v > bestVal){ bestVal = v; best = k; }
+      }
+
+      const q = ans;
+      if (score.reading === bestVal && (q.q3==="reading" || q.q4==="reading")) best = "reading";
+      if (score.nightFocus === bestVal && (q.q1==="night" || q.q5==="night")) best = "nightFocus";
+
+      return best;
+    }
+
+    psyForm.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      const fd = new FormData(psyForm);
+      const ans = {
+        q1: fd.get("q1"),
+        q2: fd.get("q2"),
+        q3: fd.get("q3"),
+        q4: fd.get("q4"),
+        q5: fd.get("q5")
+      };
+
+      const theme = computeThemeFromAnswers(ans);
+      state.theme = theme;
+      persist();
+
+      applyTheme(theme);
+
+      // Show dashboard
+      const fn = state?.student?.firstName ?? "";
+      const ln = state?.student?.lastName ?? "";
+      const displayName = (fn + " " + ln).trim() || "زائر";
+      visitorNameEl.textContent = displayName;
+
+      psyPanel.classList.remove("show");
+      dashboard.classList.add("show");
+    });
+
+    // If already have both student + theme, jump to dashboard (optional behavior)
+    // We'll keep it gentle: show dashboard only if they completed earlier.
+    if (state?.student?.firstName && state?.theme){
+      applyTheme(state.theme);
+      visitorNameEl.textContent = `${state.student.firstName} ${state.student.lastName}`.trim();
+      scene.classList.add("hidden");
+      psyPanel.classList.remove("show");
+      dashboard.classList.add("show");
+    } else {
+      thinkBtn.disabled = true; // until lit
+    }
+  </script>
+</body>
+</html>
